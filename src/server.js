@@ -1,7 +1,7 @@
-import express from "express";
 import http from "http";
-import { type } from "os";
-import WebSocket from "ws";
+import SocketIO from "socket.io";
+import express from "express";
+import { Socket } from "dgram";
 
 const app = express();
 
@@ -20,23 +20,55 @@ app.get("/", (_, res) => res.render("home"));
 // chachall url 사용 (url 뒤에 아무 오타가 나도 home으로 리다이렉트)
 app.get("/*", (_, res) => res.redirect("/"));
 
-// http와 ws 프로토콜 2개를 모두 합칠 예정 
-const handleListen = () => console.log(`Listening on http://localhost:3000`); //app.listen(3000, handleListen);
 
 /* http 서버 위에 ws 서버를 만들기 */
 // http 프로토콜 서버 
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
+
+// Socket IO 서버
+const wsServer = SocketIO(httpServer);
+
+wsServer.on("connection", (socket) => {
+    socket["nickname"] = "Anon";
+    socket.onAny((event) => {
+        console.log(`Socket Event: ${event}`);
+        console.log(wsServer.sockets.adapter);
+    });
+    
+    socket.on("enter_room", (roomName,done) => {
+        // 방 만들기 
+        socket.join(roomName);
+        done();
+
+        // 방 입장시, 전체글 보내기 
+        socket.to(roomName).emit("welcome", socket.nickname);
+    });
+
+    // 유저 퇴장
+    socket.on("disconnecting", () => {
+        socket.rooms.forEach((room) => 
+        socket.to(room).emit("bye", socket.nickname));
+    });
+
+    // 본인이 보낸 메시지 확인 
+    socket.on("new_message", (msg, room, done) => {
+        socket.to(room).emit("new_message", `${socket.nickname}: ${msg}`);
+        done();
+    });
+
+    // 닉네임
+    socket.on("nickname", nickname => socket["nickname"] = nickname);
+});
+
+/* Socket IO를 사용하면서 WebSocket에 사용하던 이벤트 함수는 주석처리 완 
+import { type } from "os";
+import WebSocket from "ws";
+
 // websocket 프로토콜 서버 
 const wss = new WebSocket.Server({ server });
 
-// function 메시지 정리
-function onSocketClose(){
-    console.log("Disconnected from the Browser!");
-};
-
 // 누군가 서버에 연결하면 그 커넥션을 넣음 
 const sockets = [];
-
 // on 메서드는 백엔드에서 연결된 사람의 정보를 제공해준다, 코드는 2번 작동한다 
 wss.on("connection", (socket)=> {
     sockets.push(socket);
@@ -55,16 +87,17 @@ wss.on("connection", (socket)=> {
         // 프론트로 받은 메세지를 다시 돌려주기 
         const message = JSON.parse(msg);    //JSON으로 변환 
         switch(message.type) {
-            case "new_message":
-                sockets.forEach((aSocket) => aSocket.send(`${socket.nickName} : ${message.payload.toString('utf8')}`)); //닉네임 프로퍼티를 socket object에 저장하고 있음 
+            case "new_message":ㅁ
+                //닉네임 프로퍼티를 socket object에 저장하고 있음 
+                sockets.forEach((aSocket) => aSocket.send(`${socket.nickName} : ${message.payload.toString('utf8')}`));
             case "nickName":
                 socket["nickName"] = message.payload.toString('utf8');
         }
     });
-});
+}); */
 
-server.listen(3000, handleListen);
-
+const handleListen = () => console.log(`Listening on http://localhost:3000`); //app.listen(3000, handleListen);
+httpServer.listen(3000, handleListen);
 
 {
     type:"message";
