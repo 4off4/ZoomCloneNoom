@@ -6,6 +6,6 @@ Zoom Clone using NodeJS, WebRTC and Websockets. <br/>
     <p>소켓아이오 프레임워크를 사용하여 만든 채팅룸 입니다.</p>
 </div>
 ### 1. Initial screen <br/>
-![방1](https://user-images.githubusercontent.com/76087709/217192707-c66569e0-73ca-42cd-9826-751510ce1c2e.PNG)
+![방1](https://user-images.githubusercontent.com/76087709/217193354-98532063-3d93-4fc7-a7a1-65d423ac1f1a.PNG)
 
 
