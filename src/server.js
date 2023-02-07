@@ -1,7 +1,7 @@
 import http from "http";
-import SocketIO from "socket.io";
+import {Server} from "socket.io";
 import express from "express";
-import { Socket } from "dgram";
+import { instrument } from "@socket.io/admin-ui";
 
 const app = express();
 
@@ -26,13 +26,44 @@ app.get("/*", (_, res) => res.redirect("/"));
 const httpServer = http.createServer(app);
 
 // Socket IO 서버
-const wsServer = SocketIO(httpServer);
+const wsServer = new Server(httpServer, {
+    cors: {
+      origin: ["https://admin.socket.io"],      // 온라인 admin 데모 
+      credentials: true
+    }
+});
+
+instrument(wsServer, {
+    auth: false,
+    mode: "development",
+});
+
+function publicRooms() {
+    const { 
+        sockets: {
+            adapter: {sids, rooms},
+        }
+    } = wsServer;
+
+    // public rooms list 
+    const publicRooms = [];
+    rooms.forEach((_, key) => {
+        if(sids.get(key) === undefined) {   
+            publicRooms.push(key);
+        }
+    });
+    return publicRooms;
+}
+
+// 유저 카운트 
+function countRoom(roomName) {
+    return wsServer.sockets.adapter.rooms.get(roomName)?.size;
+}
 
 wsServer.on("connection", (socket) => {
     socket["nickname"] = "Anon";
     socket.onAny((event) => {
         console.log(`Socket Event: ${event}`);
-        console.log(wsServer.sockets.adapter);
     });
     
     socket.on("enter_room", (roomName,done) => {
@@ -41,13 +72,23 @@ wsServer.on("connection", (socket) => {
         done();
 
         // 방 입장시, 전체글 보내기 
-        socket.to(roomName).emit("welcome", socket.nickname);
+        socket.to(roomName).emit("welcome", socket.nickname, countRoom(roomName));
+
+        // 방 생성  
+        wsServer.sockets.emit("room_change", publicRooms());
     });
 
     // 유저 퇴장
+    // disconnecting 이벤트는 socket이 방을 떠나기 바로 직전에 발생한다. 
     socket.on("disconnecting", () => {
         socket.rooms.forEach((room) => 
-        socket.to(room).emit("bye", socket.nickname));
+        socket.to(room).emit("bye", socket.nickname, countRoom(room)-1));      // -1을 하는 이유는 : disconnecting이기때문에! 
+    });
+
+    // disconnect 이벤트는 socket이 방을 떠나면 바로 발생한다. 
+    socket.on("disconnect", () => {
+        // 방 생성  
+        wsServer.sockets.emit("room_change", publicRooms());
     });
 
     // 본인이 보낸 메시지 확인 
@@ -87,7 +128,7 @@ wss.on("connection", (socket)=> {
         // 프론트로 받은 메세지를 다시 돌려주기 
         const message = JSON.parse(msg);    //JSON으로 변환 
         switch(message.type) {
-            case "new_message":ㅁ
+            case "new_message":
                 //닉네임 프로퍼티를 socket object에 저장하고 있음 
                 sockets.forEach((aSocket) => aSocket.send(`${socket.nickName} : ${message.payload.toString('utf8')}`));
             case "nickName":
