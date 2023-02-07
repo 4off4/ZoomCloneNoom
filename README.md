@@ -8,19 +8,20 @@ Zoom Clone using NodeJS, WebRTC and Websockets. <br/>
     <p>소켓아이오 프레임워크를 사용하여 만든 채팅룸 입니다.</p>
     <p>어드민 패널까지 연결했습니다.</p>
 </div>
+<hr/>
 
-<h3>WebSocket 서버 설치방법</h3>
+<h4>WebSocket 서버 설치방법</h4>
 <p> npm i ws</p>
 
-<h3>Socket.io 프레임워크 설치방법</h3>
+<h4>Socket.io 프레임워크 설치방법</h4>
 <p>npm i socket.io </p>
 
-<h3>Socket.io Admin Panel 설치방법</h3>
+<h4>Socket.io Admin Panel 설치방법</h4>
 <p>npm i "@socket.io/admin-ui"</p>
 
 <h3>서버 온</h3>
 <p>npm run dev</p>
-
+<hr/>
 
 <h4>자세한 내용은 블로그를 참고하세요 </h4>
 ### [✨Blog] (https://blog.naver.com/4off4/223001853785) <br/>
