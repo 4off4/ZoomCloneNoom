@@ -24,7 +24,7 @@ Zoom Clone using NodeJS, WebRTC and Websockets. <br/>
 </div>
 
 <h4>자세한 내용은 블로그를 참고하세요 </h4>
-## [✨Blog](https://blog.naver.com/4off4/223001853785) 
+### [✨Blog](https://blog.naver.com/4off4/223001853785) <br/>
 성격급한거북이의 블로그 - 프로젝트(줌클론) 
 
 
