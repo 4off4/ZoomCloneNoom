@@ -1,7 +1,7 @@
 # Noom 
-Zoom Clone using NodeJS, WebRTC and Websockets. <br/>
-<h5>안녕하세요.<br>이 사이트는 개인 공부 목적으로 만들었습니다.</h5> 
-    
+Zoom Clone using NodeJS, WebRTC and Websockets and Socket.io <br/>
+<h4>안녕하세요.<br>이 사이트는 개인 공부 목적으로 만들었습니다.</h4> 
+<hr/>
 <div>
     <h3>SocketIO</h3>
     <p>#2.11 Admin Panel 수업까지 완료</p>
@@ -11,16 +11,28 @@ Zoom Clone using NodeJS, WebRTC and Websockets. <br/>
 <hr/>
 
 <h4>WebSocket 서버 설치방법</h4>
-<p> npm i ws</p>
+
+```c
+npm i ws
+```
 
 <h4>Socket.io 프레임워크 설치방법</h4>
-<p>npm i socket.io </p>
+
+```c
+npm i socket.io
+```
 
 <h4>Socket.io Admin Panel 설치방법</h4>
-<p>npm i "@socket.io/admin-ui"</p>
+
+```c
+npm i "@socket.io/admin-ui"
+```
 
 <h3>서버 온</h3>
-<p>npm run dev</p>
+
+```c
+npm run dev
+```
 <hr/>
 
 <h4>자세한 내용은 블로그를 참고하세요 </h4>
