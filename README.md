@@ -36,12 +36,11 @@ npm run dev
 <hr/>
 
 <h4>자세한 내용은 블로그를 참고하세요 </h4>
-## [✨Blog](https://blog.naver.com/4off4/223001853785) <br/>
+[✨Blog](https://blog.naver.com/4off4/223001853785) <br/>
 성격급한거북이의 블로그 - 프로젝트(줌클론) <br/>
 
 <h4>노마드코더-줌클론수업</h4>
-## [ZOOM 클론코딩](https://nomadcoders.co/noom/lobby) <br/>
-
+[ZOOM 클론코딩](https://nomadcoders.co/noom/lobby) <br/>
 
 ## 1. Initial screen <br/>
 <img width="50%" src="https://user-images.githubusercontent.com/76087709/217193354-98532063-3d93-4fc7-a7a1-65d423ac1f1a.PNG"/>
